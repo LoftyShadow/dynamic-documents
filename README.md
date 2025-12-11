@@ -79,7 +79,7 @@ luffy-documents/
 
 ### 配置说明
 
-可以在 `scripts/generate-sidebar.js` 中修改配置:
+[多环境配置指南](./多环境配置指南.md)
 
 ## 侧边栏生成规则
 
@@ -127,3 +127,4 @@ luffy-documents/
 1. 确保 `chokidar` 已正确安装
 2. 检查文件路径是否正确
 3. 尝试重启监控服务
+4. 文件是否在排除列表中? 查看 `scripts/generate-sidebar.js` 中的 `excludes` 配置。

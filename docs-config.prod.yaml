@@ -3,12 +3,11 @@
 
 projects:
   # 生产环境通常指向服务器上的稳定文档目录
-  # 或者 CI/CD 流程中拉取的文档目录
   - name: 工作文档
     sourceDir: /var/www/docs/work
     enabled: true
     collapsed: false
-  
+
   - name: 项目文档
     sourceDir: /var/www/docs/projects
     enabled: true

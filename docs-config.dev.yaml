@@ -1,16 +1,14 @@
 # VitePress 动态侧边栏配置文件
-# 版本: 2.0.0
 
 # ============================================================
 # 项目配置
 # ============================================================
 # 定义要监控的文档项目列表
 # 每个项目可以独立启用/禁用，控制是否折叠
-
 projects:
   # 工作文档项目
   - name: 工作文档
-    sourceDir: C:\Work\md
+    sourceDir: C:\Work\MD
     enabled: true
     collapsed: false
     description: 日常工作文档
@@ -65,10 +63,6 @@ localFixedDocs:
     items:
       - text: 使用指南
         link: /local/guide/使用指南
-      - text: 快速参考
-        link: /local/reference/快速参考
-      - text: 项目实现总结
-        link: /local/summary/项目实现总结
 
 # ============================================================
 # 系统设置
@@ -86,6 +80,7 @@ settings:
     - .git
     - .vitepress
     - README.md
+    - .DS_Store
 
   # 输出文件路径（相对于项目根目录）
   outputFile: .vitepress/config/sidebar.ts

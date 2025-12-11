@@ -14,14 +14,14 @@ projects:
     enabled: true
     collapsed: false
     description: 日常工作文档
-  
+
   # 学习笔记项目（已禁用）
   - name: 学习笔记
     sourceDir: C:\Study\notes
     enabled: false
     collapsed: true
     description: 学习笔记和教程
-  
+
   # 项目文档（已禁用）
   - name: 项目文档
     sourceDir: C:\Projects\docs
@@ -43,7 +43,7 @@ fixedLinks:
         link: https://vitepress.dev/
       - text: Markdown 语法指南
         link: https://www.markdownguide.org/
-  
+
   # 开发工具
   - text: 🔧 开发工具
     collapsed: true
@@ -64,11 +64,7 @@ localFixedDocs:
     collapsed: false
     items:
       - text: 使用指南
-        link: /使用指南
-      - text: 快速参考
-        link: /快速参考
-      - text: 项目实现总结
-        link: /项目实现总结
+        link: /local/guide/使用指南
 
 # ============================================================
 # 系统设置
@@ -78,7 +74,7 @@ settings:
   # 防抖延迟（毫秒）
   # 文件变化后等待多久再重新生成，避免频繁触发
   debounceDelay: 1000
-  
+
   # 排除的文件和目录
   # 这些文件/目录不会被扫描和同步
   excludes:
@@ -86,9 +82,9 @@ settings:
     - .git
     - .vitepress
     - README.md
-  
+
   # 输出文件路径（相对于项目根目录）
   outputFile: .vitepress/config/sidebar.ts
-  
+
   # 文档同步目录
   docsDir: docs
