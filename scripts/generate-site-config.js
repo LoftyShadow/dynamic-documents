@@ -1,13 +1,14 @@
 /**
  * 自动生成 VitePress 站点配置（侧边栏 + 导航栏）
  * 支持多项目、固定链接和本地通用文档
+ * sidebar 按路径分组，实现不同页面显示不同侧边栏
  */
 
 const fs = require('fs');
 const path = require('path');
 
 const { loadConfig } = require('./lib/config-loader');
-const { countItems } = require('./lib/file-utils');
+const { countItems, normalizeLink } = require('./lib/file-utils');
 const { scanDirectory } = require('./lib/directory-scanner');
 const { syncProjectDocuments, generateEmptyProjectPage } = require('./lib/file-sync');
 const { buildNavConfig } = require('./lib/nav-builder');
@@ -17,7 +18,7 @@ const ROOT_DIR = path.join(__dirname, '..');
 
 /**
  * 写入配置数据到文件
- * @param {Array} sidebarConfig - 侧边栏配置
+ * @param {Object} sidebarConfig - 侧边栏配置（按路径分组的对象）
  * @param {Object} navData - 导航配置数据
  * @param {string} outputFile - 输出文件路径
  */
@@ -46,10 +47,10 @@ export default { sidebar, nav, projectNav, projectNavTitle }
 }
 
 /**
- * 处理单个项目
+ * 处理单个项目，返回 sidebar section 配置
  * @param {Object} project - 项目配置
  * @param {Object} settings - 全局设置
- * @returns {Object|null} - 侧边栏配置项或 null
+ * @returns {Object|null} - { text, collapsed, items, count } 或 null
  */
 function processProject(project, settings) {
     if (!project.enabled) {
@@ -80,11 +81,9 @@ function processProject(project, settings) {
         console.log(`    ✓ 找到 ${count} 个文档`);
 
         return {
-            config: {
-                text: project.name,
-                collapsed: project.collapsed || false,
-                items: projectItems
-            },
+            text: project.name,
+            collapsed: project.collapsed !== false,  // 默认折叠
+            items: projectItems,
             count
         };
     }
@@ -94,13 +93,46 @@ function processProject(project, settings) {
     console.log(`    ⚠️  未找到文档，已生成占位页面`);
 
     return {
-        config: {
-            text: project.name,
-            collapsed: project.collapsed || false,
-            items: [{ text: '暂无文档', link: `/docs/${project.name}/index` }]
-        },
+        text: project.name,
+        collapsed: project.collapsed !== false,
+        items: [{ text: '暂无文档', link: `/docs/${project.name}/index` }],
         count: 0
     };
+}
+
+/**
+ * 处理本地固定文档，生成对应的 sidebar 配置
+ * @param {Array} localFixedDocs - 本地固定文档配置
+ * @returns {Object} - 路径分组的 sidebar 配置
+ */
+function processLocalFixedDocs(localFixedDocs) {
+    const result = {};
+
+    if (!Array.isArray(localFixedDocs)) {
+        return result;
+    }
+
+    for (const section of localFixedDocs) {
+        if (!section || !Array.isArray(section.items) || section.items.length === 0) {
+            continue;
+        }
+
+        // 从第一个 item 的 link 提取路径前缀
+        const firstLink = section.items[0]?.link || '';
+        const normalized = normalizeLink(firstLink);
+
+        // 提取路径前缀，如 /local/guide/使用指南 -> /local/
+        const pathMatch = normalized.match(/^(\/[^/]+\/)/);
+        if (pathMatch) {
+            const pathKey = pathMatch[1];
+            result[pathKey] = section.items.map(item => ({
+                text: item.text,
+                link: normalizeLink(item.link)
+            }));
+        }
+    }
+
+    return result;
 }
 
 /**
@@ -112,22 +144,40 @@ function generateSiteConfig() {
     console.log(SEPARATOR);
 
     const config = loadConfig();
-    const sidebarConfig = [];
+    const sidebarConfig = {};
+    const docsSidebar = [];  // 所有项目共享的 sidebar
     let totalDocs = 0;
 
-    // 处理各个项目
+    // 处理各个项目，收集到同一个 sidebar 数组中
     if (config.projects?.length > 0) {
         console.log('📁 处理项目文档...');
 
         for (const project of config.projects) {
             const result = processProject(project, config.settings);
             if (result) {
-                sidebarConfig.push(result.config);
+                docsSidebar.push({
+                    text: result.text,
+                    collapsed: result.collapsed,
+                    items: result.items
+                });
                 totalDocs += result.count;
             }
         }
 
+        // 所有项目共享 /docs/ 路径
+        if (docsSidebar.length > 0) {
+            sidebarConfig['/docs/'] = docsSidebar;
+        }
+
         console.log('');
+    }
+
+    // 处理本地固定文档
+    if (config.localFixedDocs) {
+        console.log('📄 处理本地固定文档...');
+        const localSidebar = processLocalFixedDocs(config.localFixedDocs);
+        Object.assign(sidebarConfig, localSidebar);
+        console.log(`    ✓ 添加了 ${Object.keys(localSidebar).length} 个本地文档路径\n`);
     }
 
     // 构建导航配置并写入配置文件

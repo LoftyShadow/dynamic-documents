@@ -62,7 +62,7 @@ function buildNavSection(section) {
 /**
  * 构建项目跳转导航
  * @param {Object} config - 完整配置
- * @param {Array} sidebarConfig - 侧边栏配置
+ * @param {Object} sidebarConfig - 侧边栏配置（路径分组对象）
  * @returns {Object|null} - 项目导航配置或 null
  */
 function buildProjectNavSection(config, sidebarConfig) {
@@ -77,11 +77,14 @@ function buildProjectNavSection(config, sidebarConfig) {
 
     const docsDir = config.settings?.docsDir || 'docs';
     const title = config.settings?.projectNavTitle || '配置导航';
-    const sectionMap = buildSectionMap(sidebarConfig);
+
+    // 从 /docs/ 路径获取所有项目的 sidebar
+    const docsSidebar = sidebarConfig['/docs/'] || [];
 
     const items = enabledProjects
         .map(project => {
-            const projectSection = sectionMap.get(project.name);
+            // 从 sidebar 中找到对应项目的配置
+            const projectSection = docsSidebar.find(section => section.text === project.name);
             const firstDocLink = findFirstDocLink(projectSection);
             const resolvedLink = project.navLink || firstDocLink || resolveProjectLink(project, docsDir);
             const normalized = normalizeLink(resolvedLink);

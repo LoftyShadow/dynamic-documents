@@ -16,7 +16,7 @@ const fallbackSidebar = [
 ]
 
 const resolvedNav = autoNav.length > 0 ? [...baseNav, ...autoNav] : baseNav
-const resolvedSidebar = autoSidebar.length > 0 ? autoSidebar : fallbackSidebar
+const resolvedSidebar = Object.keys(autoSidebar).length > 0 ? autoSidebar : fallbackSidebar
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
