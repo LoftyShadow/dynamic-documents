@@ -65,6 +65,9 @@ function processProject(project, settings) {
         return null;
     }
 
+    // 无论是否有文档，都先同步（处理已删除文件的占位页面）
+    syncProjectDocuments(project, settings.docsDir, settings.excludes, ROOT_DIR);
+
     const projectItems = scanDirectory(
         project.sourceDir,
         project.sourceDir,
@@ -75,8 +78,6 @@ function processProject(project, settings) {
     if (projectItems.length > 0) {
         const count = countItems(projectItems);
         console.log(`    ✓ 找到 ${count} 个文档`);
-
-        syncProjectDocuments(project, settings.docsDir, settings.excludes, ROOT_DIR);
 
         return {
             config: {
