@@ -3,8 +3,6 @@ import { sidebar as autoSidebar, nav as autoNav } from './config/sidebar'
 
 const baseNav = [
   { text: '首页', link: '/' },
-  { text: '文档', link: '/docs/' },
-  { text: '示例', link: '/markdown-examples' }
 ]
 
 const fallbackSidebar = [
@@ -24,12 +22,14 @@ const resolvedSidebar = autoSidebar.length > 0 ? autoSidebar : fallbackSidebar
 export default defineConfig({
   title: "DynamicDocuments",
   description: "动态文档中心",
+  head: [['link', {rel: 'icon', href: '/icons/favicon.ico'}]],
   vite: {
     server: {
       port: 4569
     }
   },
   themeConfig: {
+    logo: '/icons/favicon.ico',
     // https://vitepress.dev/reference/default-theme-config
     nav: resolvedNav,
 
