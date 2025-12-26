@@ -5,6 +5,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const { minimatch } = require('minimatch');
 
 /**
@@ -76,10 +77,26 @@ function countItems(items) {
     return count;
 }
 
+/**
+ * 展开路径中的 ~ 为用户主目录
+ * @param {string} filePath - 文件路径
+ * @returns {string} - 展开后的路径
+ */
+function expandTildePath(filePath) {
+    if (!filePath || typeof filePath !== 'string') {
+        return filePath;
+    }
+    if (filePath.startsWith('~/') || filePath === '~') {
+        return path.join(os.homedir(), filePath.slice(1));
+    }
+    return filePath;
+}
+
 module.exports = {
     extractTitle,
     getFileName,
     isExcluded,
     normalizeLink,
-    countItems
+    countItems,
+    expandTildePath
 };

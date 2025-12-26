@@ -20,7 +20,7 @@ const resolvedSidebar = Object.keys(autoSidebar).length > 0 ? autoSidebar : fall
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "DynamicDocuments",
+  title: "动态文档中心",
   description: "动态文档中心",
   head: [['link', {rel: 'icon', href: '/icons/favicon.ico'}]],
   vite: {

@@ -6,6 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
+const { expandTildePath } = require('./file-utils');
 
 // 加载 .env 文件中的环境变量
 require('dotenv').config();
@@ -40,6 +41,16 @@ function loadConfig() {
                 const content = fs.readFileSync(file, 'utf-8');
                 const config = yaml.load(content);
                 console.log(`✓ 使用配置文件: ${path.basename(file)}`);
+
+                // 展开所有 project.sourceDir 中的 ~
+                if (Array.isArray(config.projects)) {
+                    config.projects.forEach(project => {
+                        if (project.sourceDir) {
+                            project.sourceDir = expandTildePath(project.sourceDir);
+                        }
+                    });
+                }
+
                 return config;
             }
         }

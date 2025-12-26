@@ -8,14 +8,14 @@
 projects:
   # 工作文档项目
   - name: 工作文档
-    sourceDir: C:\Users\10942\IdeaProjects\plg-backend
+    sourceDir: ~/IdeaProjects/plg-backend
     enabled: true
     collapsed: false
     description: 项目文档
 
   # 学习笔记项目（已禁用）
   - name: Claude Code生成计划
-    sourceDir: C:\Users\10942\.claude\plans
+    sourceDir: ~/.claude/plans
     enabled: true
     collapsed: true
     description: Claude Code生成计划
