@@ -48,6 +48,15 @@ export default defineConfig({
       provider: 'local'
     },
 
+    // 404 页面配置
+    notFound: {
+      title: '文档不存在',
+      quote: '该文档可能已被删除、移动或重命名。',
+      linkLabel: '返回首页',
+      linkText: '返回首页',
+      code: '404'
+    },
+
     // 页脚配置
     footer: {
       copyright: 'Copyright © 2025'
