@@ -36,9 +36,6 @@ export default defineConfig({
     // 使用自动生成的侧边栏配置
     sidebar: resolvedSidebar,
 
-    // 禁用右侧目录导航
-    outline: false,
-
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
     ],
@@ -55,6 +52,11 @@ export default defineConfig({
       linkLabel: '返回首页',
       linkText: '返回首页',
       code: '404'
+    },
+
+    outline: {
+      level: [1, 5], // 设置目录层级
+      label: '页面导航', // 自定义标题
     },
 
     // 页脚配置
