@@ -55,7 +55,7 @@ pnpm run generate
 ### 目录结构
 
 ```
-luffy-documents/
+dynamic-documents/
 ├── .vitepress/
 │   ├── config.mts          # VitePress 主配置
 │   └── config/
